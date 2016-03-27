@@ -7,44 +7,34 @@ namespace StathisG\GreekSlugGenerator;
  * @package StathisG\GreekSlugGenerator
  * @author StathisG (Stathis Goudoulakis, me@stathisg.com)
  * @license MIT
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 class GreekSlugGenerator
 {
-    public function __construct() {}
-
     /**
     * Generates a slug (pretty url) based on a string, which is typically a page/article title
     *
-    * @param string $str
+    * @param string $string
+    * @param string $separator
     * @return string the generated slug
     */
-    public function get_slug($str)
+    public static function getSlug($string, $separator = '-')
     {
         $slug = '';
-        $last_char = '';
-        $current_char = '';
-        $str = trim($str);
+        $lastCharacter = '';
+        $string = trim(mb_strtolower($string, 'utf-8'));
 
-        for ($i = 0; $i < mb_strlen($str, 'utf-8'); $i++)
-        {
-            $char = $this->utf8_substr($str, $i, 1);
-            $current_char = $this->convert_character($char);
-            
-            if($current_char === $last_char && $current_char === '-')
-            {
-                //ignore character
-            }
-            else
-            {
-                $slug .= $current_char;
+        for ($i = 0; $i < mb_strlen($string, 'utf-8'); $i++)  {
+            $tempCharacter = self::utf8_substr($string, $i, 1);
+            $currentCharacter = static::convertCharacter($tempCharacter, $separator);
+
+            if(empty($currentCharacter) || ($currentCharacter === $lastCharacter && $currentCharacter === $separator))  {
+                continue;
             }
 
-            if(!empty($current_char))
-            {
-                $last_char = $current_char;
-            }
+            $lastCharacter = $currentCharacter;
+            $slug .= $currentCharacter;
         }
         
         return $slug;
@@ -62,15 +52,12 @@ class GreekSlugGenerator
     {
         preg_match_all('/./su', $str, $ar);
 
-        if(func_num_args() >= 3)
-        {
+        if(func_num_args() >= 3) {
             $end = func_get_arg(2);
             return join('', array_slice($ar[0], $start, $end));
         }
-        else
-        {
-            return join('', array_slice($ar[0], $start, $end));
-        }
+
+        return join('', array_slice($ar[0], $start, $end));
     }
 
     /**
@@ -78,123 +65,92 @@ class GreekSlugGenerator
     *
     * If it is a Greek character, converts it to an English equivalent.
     * If it is an English character or a number, returns the same character/number.
-    * If it is a space, converts it to a dash (-) character.
-    * If it is a symbol, either translates it to a dash character (depending on the rules), or just ignores it and returns an empty string.
+    * If it is a space, converts it to the selected separator.
+    * If it is a symbol, either translates it to the selected separator (depending on the rules), or just ignores it and returns an empty string.
     *
-    * @param string $char
+    * @param string $character
+    * @param string $separator
     * @return string the converted character
     */
-    private function convert_character($char)
+    protected function convertCharacter($character, $separator)
     {
-        $allowed_characters = array('A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-');
+        $allowedCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', $separator];
 
-        if ($char === ' ' || $char === ':' || $char === '–' || $char === '_' || $char === '/' || $char === '\\')
-        {
-            return '-';
+        if (in_array($character, $allowedCharacters)) {
+            return $character;
         }
-        else if (in_array($char, $allowed_characters))
-        {
-            return strtolower($char);
-        }
-        else if ($char=='Α' || $char=='α' || $char=='Ά' || $char=='ά')
-        {
-            return 'a';
-        }
-        else if ($char=='Β' || $char=='β')
-        {
-            return 'b';
-        }
-        else if ($char=='Γ' || $char=='γ')
-        {
-            return 'g';
-        }
-        else if ($char=='Δ' || $char=='δ')
-        {
-            return 'd';
-        }
-        else if ($char=='Ε' || $char=='ε' || $char=='Έ' || $char=='έ')
-        {
-            return 'e';
-        }
-        else if ($char=='Ζ' || $char=='ζ')
-        {
-            return 'z';
-        }
-        else if ($char=='Η' || $char=='η' || $char=='Ή' || $char=='ή')
-        {
-            return 'h';
-        }
-        else if ($char=='Θ' || $char=='θ')
-        {
-            return 'th';
-        }
-        else if ($char=='Ι' || $char=='ι' || $char=='Ί' || $char=='ί' || $char=='ϊ' || $char=='ΐ')
-        {
-            return 'i';
-        }
-        else if ($char=='Κ' || $char=='κ')
-        {
-            return 'k';
-        }
-        else if ($char=='Λ' || $char=='λ')
-        {
-            return 'l';
-        }
-        else if ($char=='Μ' || $char=='μ')
-        {
-            return 'm';
-        }
-        else if ($char=='Ν' || $char=='ν')
-        {
-            return 'n';
-        }
-        else if ($char=='Ξ' || $char=='ξ')
-        {
-            return 'ks';
-        }
-        else if ($char=='Ο' || $char=='ο' || $char=='Ό' || $char=='ό')
-        {
-            return 'o';
-        }
-        else if ($char=='Π' || $char=='π')
-        {
-            return 'p';
-        }
-        else if ($char=='Ρ' || $char=='ρ')
-        {
-            return 'r';
-        }
-        else if ($char=='Σ' || $char=='σ' || $char=='ς')
-        {
-            return 's';
-        }
-        else if ($char=='Τ' || $char=='τ')
-        {
-            return 't';
-        }
-        else if ($char=='Υ' || $char=='υ' || $char=='Ύ' || $char=='ύ' || $char=='ϋ')
-        {
-            return 'y';
-        }
-        else if ($char=='Φ' || $char=='φ')
-        {
-            return 'f';
-        }
-        else if ($char=='Χ' || $char=='χ')
-        {
-            return 'x';
-        }
-        else if ($char=='Ψ' || $char=='ψ')
-        {
-            return 'ps';
-        }
-        else if ($char=='Ω' || $char=='ω' || $char=='Ώ' || $char=='ώ')
-        {
-            return 'w';
-        }
-        else
-        {
-            return '';
+
+        switch ($character) {
+            case ' ':
+            case ':':
+            case '-':
+            case '—':
+            case '_':
+            case '/':
+            case '\\':
+                return $separator;
+            case 'α':
+            case 'ά':
+                return 'a';
+            case 'β':
+                return 'b';
+            case 'γ':
+                return 'g';
+            case 'δ':
+                return 'd';
+            case 'ε':
+            case 'έ':
+                return 'e';
+            case 'ζ':
+                return 'z';
+            case 'η':
+            case 'ή':
+                return 'h';
+            case 'θ':
+                return 'th';
+            case 'ι':
+            case 'ί':
+            case 'ϊ':
+            case 'ΐ':
+                return 'i';
+            case 'κ':
+                return 'k';
+            case 'λ':
+                return 'l';
+            case 'μ':
+                return 'm';
+            case 'ν':
+                return 'n';
+            case 'ξ':
+                return 'ks';
+            case 'ο':
+            case 'ό':
+                return 'o';
+            case 'π':
+                return 'p';
+            case 'ρ':
+                return 'r';
+            case 'σ':
+            case 'ς':
+                return 's';
+            case 'τ':
+                return 't';
+            case 'υ':
+            case 'ύ':
+            case 'ϋ':
+            case 'ΰ':
+                return 'y';
+            case 'φ':
+                return 'f';
+            case 'χ':
+                return 'x';
+            case 'ψ':
+                return 'ps';
+            case 'ω':
+            case 'ώ':
+                return 'w';
+            default:
+                return '';
         }
     }
 }
