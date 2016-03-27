@@ -1,6 +1,6 @@
 # (Greek) Slug Generator
 
-```GreekSlugGenerator``` is a [slug](http://en.wikipedia.org/wiki/Slug_(web_publishing\)#Slug) (pretty URL) generator, which supports Greek UTF-8 encoded characters, and generates a slug based on strings which are typically titles of pages or articles.
+```GreekSlugGenerator``` is a [slug][1] (pretty URL) generator, which supports Greek UTF-8 encoded characters, and generates a slug based on strings which are typically titles of pages or articles.
 
 **The class can be used for English-only titles as well.**
 
@@ -8,11 +8,15 @@ If a Greek character is found, it is converted to its English equivalent.
 
 Spaces as well as some punctuation marks are converted to dashes, but if at any point multiple sequential dashes are produced, only one appears in the final slug.
 
+## Installation
+
+It can be installed either by requiring the ```GreekSlugGenerator.php``` file under ```src```, or via Composer by using the [Packagist archive][2].
+
 ## How to use & examples
 
 ```php
-require_once('GreekSlugGenerator.php');
-$slug_generator = new GreekSlugGenerator();
+require_once('src/GreekSlugGenerator.php');
+$slug_generator = new \StathisG\GreekSlugGenerator\GreekSlugGenerator();
 
 /* produces: the-class-can-be-used-for-english-only-titles-as-well */
 echo $slug_generator->get_slug('The class can be used for ENGLISH-ONLY titles as well');
@@ -32,3 +36,6 @@ echo $slug_generator->get_slug('Greek example #1: Έκθεση Φωτογραφ�
 /* produces: greek-example-2-h-ekthesh-ksekinaei-thn-tetarth-08-05-2013-kai-wra-20-45-h-diarkeia-ths-ektheshs-tha-einai-apo-08-05-ews-07-06 */
 echo $slug_generator->get_slug('Greek example #2: Η έκθεση ξεκινάει την Τετάρτη 08/05/2013 και ώρα 20:45. Η διάρκεια της έκθεσης θα είναι από 08/05 έως 07/06');
 ```
+
+[1]: http://en.wikipedia.org/wiki/Slug_(web_publishing\)#Slug
+[2]: https://packagist.org/packages/stathisg/greek-slug-generator

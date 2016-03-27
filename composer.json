@@ -1,0 +1,22 @@
+{
+    "name": "stathisg/greek-slug-generator",
+    "description": "A slug (pretty URL) generator, which supports Greek UTF-8 encoded characters",
+    "keywords": ["slug", "greeklish", "greek"],
+    "homepage": "https://github.com/stathisg/greek-slug-generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stathis Goudoulakis",
+            "email": "me@stathisg.com",
+            "homepage": "https://stathisg.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "StathisG\\GreekSlugGenerator\\": "src/"
+        }
+    }
+}

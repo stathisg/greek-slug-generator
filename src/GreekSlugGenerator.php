@@ -1,11 +1,13 @@
 <?php
+namespace StathisG\GreekSlugGenerator;
+
 /**
  * A slug (pretty URL) generator, which supports Greek UTF-8 characters
  *
- * @package GreekSlugGenerator
+ * @package StathisG\GreekSlugGenerator
  * @author StathisG (Stathis Goudoulakis, me@stathisg.com)
- * @license WTFPL Version 2
- * @version 1.0
+ * @license MIT
+ * @version 1.0.0
  */
 
 class GreekSlugGenerator
@@ -196,4 +198,3 @@ class GreekSlugGenerator
         }
     }
 }
-?>
