@@ -27,7 +27,7 @@ class GreekSlugGenerator
 
         for ($i = 0; $i < mb_strlen($string, 'utf-8'); $i++)  {
             $tempCharacter = self::utf8_substr($string, $i, 1);
-            $currentCharacter = static::convertCharacter($tempCharacter, $separator);
+            $currentCharacter = self::convertCharacter($tempCharacter, $separator);
 
             if(empty($currentCharacter) || ($currentCharacter === $lastCharacter && $currentCharacter === $separator))  {
                 continue;
@@ -48,7 +48,7 @@ class GreekSlugGenerator
     * @param int $end
     * @return string a utf-8 character
     */
-    private function utf8_substr($str, $start, $end)
+    private static function utf8_substr($str, $start, $end)
     {
         preg_match_all('/./su', $str, $ar);
 
@@ -72,7 +72,7 @@ class GreekSlugGenerator
     * @param string $separator
     * @return string the converted character
     */
-    protected function convertCharacter($character, $separator)
+    protected static function convertCharacter($character, $separator)
     {
         $allowedCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', $separator];
 
