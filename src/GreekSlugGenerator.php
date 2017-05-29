@@ -29,7 +29,7 @@ class GreekSlugGenerator
             $tempCharacter = self::utf8_substr($string, $i, 1);
             $currentCharacter = self::convertCharacter($tempCharacter, $separator);
 
-            if(empty($currentCharacter) || ($currentCharacter === $lastCharacter && $currentCharacter === $separator))  {
+            if($currentCharacter === '' || ($currentCharacter === $lastCharacter && $currentCharacter === $separator))  {
                 continue;
             }
 
